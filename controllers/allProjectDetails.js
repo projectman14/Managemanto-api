@@ -22,7 +22,7 @@ const allProjectDetails = async (req, res) => {
             })
         }
 
-        const projects = Project.find()
+        const projects = await Project.find()
 
         return res.status(200).json({
             message: 'All projects details',
