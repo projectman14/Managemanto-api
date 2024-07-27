@@ -8,6 +8,8 @@ import editProjectDetail from '../controllers/editProjectDetail.js'
 import deleteProject from '../controllers/deleteProject.js'
 import getUserprojects from '../controllers/getUserProjects.js'
 import allProjectDetails from '../controllers/allProjectDetails.js'
+import { userDeatils } from '../controllers/userDetails.js'
+import userDetailsUsingToken from '../controllers/userDetailUsingCookie.js'
 
 const router = express.Router()
 
@@ -21,5 +23,7 @@ router
     .post('/delete', deleteProject)
     .get('/userProjects', getUserprojects)
     .get('/admin/projects', allProjectDetails)
+    .post('/userDetails', userDeatils)
+    .post('/login-verificaton' , userDetailsUsingToken)
 
 export { router }

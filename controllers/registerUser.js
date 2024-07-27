@@ -50,7 +50,7 @@ const registerUser = async (req, res) => {
 
         const subject = 'Email Verification for managemento'
 
-        const text = `http://${req.headers.host}/api/verify-email/${token}`
+        const text = `${process.env.FRONTEND_URL}/verifyuser/${token}`
 
         // console.log(text)
         const MailerSender = await sendMail(userSave.email, subject, text)

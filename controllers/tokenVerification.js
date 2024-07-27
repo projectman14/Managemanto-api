@@ -8,9 +8,15 @@ const tokenVerification = async (req, res) => {
 
         const user = await User.updateOne({ _id: decoded.id }, { isVerified: true })
 
-        return res.status(202).json({
+        const cookieOptions = {
+            http: true,
+            secure: true
+        }
+
+
+        return res.cookie('token', token, cookieOptions).status(202).json({
             tokendata: user,
-            success : true
+            success: true
         })
     } catch (err) {
         return res.status(400).json({
