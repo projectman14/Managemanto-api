@@ -1,5 +1,7 @@
 import { getUserDetail } from "../helpers/getUserDetail.js";
+import sendMail from "../helpers/sendMail.js";
 import { Project } from "../models/projectModel.js";
+import { User } from "../models/userModel.js";
 
 const deleteProject = async (req, res) => {
     try {
@@ -32,7 +34,15 @@ const deleteProject = async (req, res) => {
             });
         }
 
+        const owner = await User.findById(project.creatorId)
+
         await Project.deleteOne({ _id: id });
+
+        if (user.userType === 'Admin') {
+            const subject = 'Project Deleted on managemento';
+            const text = `Hi! ${owner.name} , your project ${project.projectName} was deleted by admin . `
+            sendMail(owner.email, subject, text);
+        }
 
         return res.status(200).json({
             message: 'Deleted Successfully',

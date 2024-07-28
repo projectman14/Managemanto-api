@@ -1,5 +1,7 @@
 import { Project } from "../models/projectModel.js";
 import { getUserDetail } from "../helpers/getUserDetail.js";
+import sendMail from "../helpers/sendMail.js";
+import { User } from "../models/userModel.js";
 
 const editProjectDetail = async (req, res) => {
     try {
@@ -31,16 +33,25 @@ const editProjectDetail = async (req, res) => {
                 error: true
             });
         }
-        
+
+        const owner = await User.findById(project.creatorId)
+
         const updateFields = {};
         if (githubRepoLink) updateFields.githubRepoLink = githubRepoLink;
         if (thumbnail) updateFields.thumbnail = thumbnail;
-        if (liveHostedLink) updateFields.liveHostedLink = liveHostedLink;
+        updateFields.liveHostedLink = liveHostedLink;
         if (techStack) updateFields.techStack = techStack;
 
         await Project.updateOne({ _id: id }, { $set: updateFields });
 
         const updatedProject = await Project.findById(id);
+
+        if (user.userType === 'Admin') {
+            const subject = 'Project Edited By Admin';
+            const text = `Hey ${owner.name} your project ${updatedProject.projectName} was edited by Admin . New Project Details are ${updateFields?.githubRepoLink ? `Github Repo Link : ${updateFields.githubRepoLink}` : ''} , ${updateFields?.liveHostedLink ? `Live Hosted Link : ${updateFields.liveHostedLink}` : ''} , ${updateFields?.thumbnail ? `Thumbnail you have to check it on website` : ''} , ${updateFields?.techStack ? `Tech Stack : ${updateFields.techStack.map((tech , index) => (`${tech}`))}` : ''}`
+
+            sendMail(owner.email, subject, text);
+        }
 
         return res.status(200).json({
             message: 'Project updated successfully',
