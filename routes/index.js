@@ -12,6 +12,7 @@ import { userDeatils } from '../controllers/userDetails.js'
 import userDetailsUsingToken from '../controllers/userDetailUsingCookie.js'
 import alllUserData from '../controllers/allUserData.js'
 import getAllProjectsUsingId from '../controllers/getAllProjectsUsingId.js'
+import logout from '../controllers/logout.js'
 
 const router = express.Router()
 
@@ -28,6 +29,7 @@ router
     .post('/userDetails', userDeatils)
     .post('/login-verificaton', userDetailsUsingToken)
     .get('/admin/allusersdata', alllUserData)
-    .post('/admin/getUserDataWithId' , getAllProjectsUsingId)
+    .post('/admin/getUserDataWithId', getAllProjectsUsingId)
+    .post('/logout', logout)
 
 export { router }
