@@ -10,6 +10,8 @@ import getUserprojects from '../controllers/getUserProjects.js'
 import allProjectDetails from '../controllers/allProjectDetails.js'
 import { userDeatils } from '../controllers/userDetails.js'
 import userDetailsUsingToken from '../controllers/userDetailUsingCookie.js'
+import alllUserData from '../controllers/allUserData.js'
+import getAllProjectsUsingId from '../controllers/getAllProjectsUsingId.js'
 
 const router = express.Router()
 
@@ -24,6 +26,8 @@ router
     .get('/userProjects', getUserprojects)
     .get('/admin/projects', allProjectDetails)
     .post('/userDetails', userDeatils)
-    .post('/login-verificaton' , userDetailsUsingToken)
+    .post('/login-verificaton', userDetailsUsingToken)
+    .get('/admin/allusersdata', alllUserData)
+    .post('/admin/getUserDataWithId' , getAllProjectsUsingId)
 
 export { router }
