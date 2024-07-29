@@ -7,6 +7,9 @@ const sendMail = async (to, subject, text) => {
             auth: {
                 user: `${process.env.APP_USER}`,
                 pass: `${process.env.APP_PASS}`
+            },
+            tls: {
+                ciphers: "SSLv3"
             }
         });
 
