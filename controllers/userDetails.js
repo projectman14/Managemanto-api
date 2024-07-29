@@ -4,7 +4,7 @@ import { User } from '../models/userModel.js';
 const userDeatils = async (req, res) => {
     try {
         const { token } = req.body
-        const decode = await jwt.verify(token, process.env.JWT_SECRET)
+        const decode = await jwt.verify(token, `${process.env.JWT_SECRET}`)
 
         if(!decode){
             return res.status(400).json({
