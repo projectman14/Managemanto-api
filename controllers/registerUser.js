@@ -46,7 +46,7 @@ const registerUser = async (req, res) => {
             userType: userSave.userType
         }
 
-        const token = jwt.sign(tokenData, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(tokenData, `${process.env.JWT_SECRET}`, { expiresIn: '1h' });
 
         const subject = 'Email Verification for managemento'
 
