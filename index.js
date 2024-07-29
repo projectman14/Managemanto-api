@@ -31,4 +31,4 @@ main().then(() => {
     })
 })
 
-export { app }
+export default app
