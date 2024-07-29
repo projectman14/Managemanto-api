@@ -33,7 +33,9 @@ const verifyPassword = async (req, res) => {
 
         const cookieOptions = {
             httpOnly: true,
-            secure: true
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'None',
+            maxAge: 24 * 60 * 60 * 1000
         }
 
         return res.cookie('token', token, cookieOptions).status(200).json({
