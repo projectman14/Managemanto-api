@@ -50,7 +50,7 @@ const registerUser = async (req, res) => {
 
         const subject = 'Email Verification for managemento'
 
-        const text = `Hey! Welcome tp ManageMento . To verify yourself click on the link provided in mail and then click verify User . This Will allow you to access the dashboard without login for the first and one time only! ${process.env.FRONTEND_URL}/verifyuser/${token}`
+        const text = `Hey! Welcome to Managemento . To verify yourself click on the link provided in mail and then click verify User . This Will allow you to access the dashboard without login for the first and one time only! ${process.env.FRONTEND_URL}/verifyuser/${token}`
 
         // console.log(text)
         const MailerSender = await sendMail(userSave.email, subject, text)
