@@ -32,7 +32,7 @@ const verifyPassword = async (req, res) => {
         const token = await jwt.sign(tokenData, `${process.env.JWT_SECRET}`, { expiresIn: '1d' })
 
         const cookieOptions = {
-            http: true,
+            httpOnly: true,
             secure: true
         }
 
