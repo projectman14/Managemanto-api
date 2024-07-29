@@ -9,8 +9,10 @@ const tokenVerification = async (req, res) => {
         const user = await User.updateOne({ _id: decoded.id }, { isVerified: true })
 
         const cookieOptions = {
-            http: true,
-            secure: true
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'None',
+            maxAge: 24 * 60 * 60 * 1000
         }
 
 
