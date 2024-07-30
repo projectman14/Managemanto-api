@@ -3,14 +3,25 @@ import nodemailer from 'nodemailer';
 const sendMail = async (to, subject, text) => {
     try {
         const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            port: 465,
+            host: "smtp.gmail.com",
             auth: {
                 user: `${process.env.APP_USER}`,
-                pass: `${process.env.APP_PASS}`
+                pass: `${process.env.APP_PASS}`,
             },
-            tls: {
-                ciphers: "SSLv3"
-            }
+            secure: true,
+        });
+
+        await new Promise((resolve, reject) => {
+            transporter.verify(function (error, success) {
+                if (error) {
+                    console.log(error);
+                    reject(error);
+                } else {
+                    console.log("Server is ready to take our messages");
+                    resolve(success);
+                }
+            });
         });
 
         const mailOptions = {
