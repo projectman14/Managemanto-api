@@ -50,7 +50,7 @@ const editProjectDetail = async (req, res) => {
             const subject = 'Project Edited By Admin';
             const text = `Hey ${owner.name} your project ${updatedProject.projectName} was edited by Admin . New Project Details are ${updateFields?.githubRepoLink ? `Github Repo Link : ${updateFields.githubRepoLink}` : ''} , ${updateFields?.liveHostedLink ? `Live Hosted Link : ${updateFields.liveHostedLink}` : ''} , ${updateFields?.thumbnail ? `Thumbnail you have to check it on website` : ''} , ${updateFields?.techStack ? `Tech Stack : ${updateFields.techStack.map((tech , index) => (`${tech}`))}` : ''}`
 
-            sendMail(owner.email, subject, text);
+            await sendMail(owner.email, subject, text);
         }
 
         return res.status(200).json({

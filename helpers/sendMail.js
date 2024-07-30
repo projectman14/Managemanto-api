@@ -9,7 +9,7 @@ const sendMail = async (to, subject, text) => {
 
         const transporter = nodemailer.createTransport({
             port: 465,
-            host: "smtp.gmail.com",
+            host: 'smtp.gmail.com',
             auth: {
                 user: process.env.APP_USER,
                 pass: process.env.APP_PASS,
@@ -21,18 +21,12 @@ const sendMail = async (to, subject, text) => {
             from: process.env.APP_USER,
             to: to,
             subject: subject,
-            text: text
+            text: text,
         };
 
-        const sendMessage = async () => {
-            const info = await transporter.sendMail(mailOptions);
-            console.log('Email sent:', info.response)
-            return info.response;
-        }
-
-        const report = sendMessage()
-
-        return report;
+        const info = await transporter.sendMail(mailOptions);
+        console.log('Email sent:', info.response);
+        return info.response;
     } catch (error) {
         console.error('Error sending email:', error);
         return error;

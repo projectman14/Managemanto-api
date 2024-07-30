@@ -41,7 +41,7 @@ const deleteProject = async (req, res) => {
         if (user.userType === 'Admin') {
             const subject = 'Project Deleted on managemento';
             const text = `Hi! ${owner.name} , your project ${project.projectName} was deleted by admin . `
-            sendMail(owner.email, subject, text);
+            await sendMail(owner.email, subject, text);
         }
 
         return res.status(200).json({
