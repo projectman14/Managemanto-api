@@ -1,4 +1,4 @@
-import bcryptjs from 'bcryptjs'
+import bcryptjs from 'bcryptjs';
 import validEmail from '../helpers/validEmail.js';
 import { User } from '../models/userModel.js';
 import jwt from 'jsonwebtoken';
@@ -8,68 +8,64 @@ const registerUser = async (req, res) => {
     try {
         const { name, email, password, userType } = req.body;
 
-        const isValidEmail = validEmail(email);
-
-        if (!isValidEmail) {
+        if (!validEmail(email)) {
             return res.status(400).json({
                 message: 'The email is not of type @lnmiit.ac.in',
                 error: true
             });
         }
 
-        const checkEmail = await User.findOne({ email })
-
-        if (checkEmail) {
+        if (await User.findOne({ email })) {
             return res.status(400).json({
-                message: "User already exits",
+                message: "User already exists",
                 error: true
-            })
+            });
         }
 
-        const salt = await bcryptjs.genSalt(10)
-        const hashPassword = await bcryptjs.hash(password, salt)
+        const adminEmails = [
+            '22ucs216@lnmiit.ac.in',
+            '22ucs067@lnmiit.ac.in',
+            '22ucs110@lnmiit.ac.in',
+            '22ucs236@lnmiit.ac.in',
+            '22ucs212@lnmiit.ac.in',
+            '23ucs633@lnmiit.ac.in'
+        ];
 
-        const payload = {
-            name,
-            email,
-            password: hashPassword,
-            userType
+        let finalUserType = 'Student';
+
+        if (userType === 'Admin' && adminEmails.includes(email)) {
+            finalUserType = 'Admin';
         }
 
-        const user = new User(payload)
-        const userSave = await user.save()
+        const hashPassword = await bcryptjs.hash(password, await bcryptjs.genSalt(10));
 
-        const tokenData = {
-            id: userSave._id,
-            name: userSave.name,
-            email: userSave.email,
-            userType: userSave.userType
-        }
+        const payload = { name, email, password: hashPassword, userType: finalUserType };
 
-        const token = jwt.sign(tokenData, `${process.env.JWT_SECRET}`, { expiresIn: '1h' });
+        const userSave = await new User(payload).save();
 
-        const subject = 'Email Verification for managemento'
+        const token = jwt.sign(
+            { id: userSave._id, name: userSave.name, email: userSave.email, userType: userSave.userType },
+            `${process.env.JWT_SECRET}`,
+            { expiresIn: '1h' }
+        );
 
-        const text = `Hey! Welcome to Managemento . To verify yourself click on the link provided in mail and then click verify User . This Will allow you to access the dashboard without login for the first and one time only! ${process.env.FRONTEND_URL}/verifyuser/${token}`
+        const subject = 'Email Verification for Managemento';
+        const text = `Hey! Welcome to Managemento. To verify yourself, click on the link provided in the email and then click "Verify User". This will allow you to access the dashboard without login for the first time only! ${process.env.FRONTEND_URL}/verifyuser/${token}`;
 
-        // console.log(text)
-        const MailerSender = await sendMail(userSave.email, subject, text)
-        console.log(MailerSender)
+        await sendMail(userSave.email, subject, text);
 
         return res.status(201).json({
             message: 'User created successfully',
             data: userSave,
-            token: token,
-            sucess: true
-        })
-
-
+            token,
+            success: true
+        });
     } catch (err) {
         return res.status(400).json({
             message: err.message || err,
             error: true
-        })
+        });
     }
-}
+};
 
-export { registerUser }
+export { registerUser };
